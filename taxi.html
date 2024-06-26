@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="bg">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Такси калкулатор за Пловдив</title>
+    <title>Taxi Fare Calculator for Plovdiv</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +28,7 @@
             min-height: 100vh;
             margin: 0;
             padding: 0;
-            background: linear-gradient(to bottom, black 50%, yellow 50%);
+            background: linear-gradient(to bottom, #101010 50%, #ffc61a 50%);
             color: white;
         }
         .container {
@@ -39,17 +39,19 @@
             background: rgba(0, 0, 0, 0.5);
             padding: 20px;
             border-radius: 10px;
+            max-width: 600px; /* По-малък контейнер за по-малки екрани */
+            margin: 20px auto; /* Центриране на контейнера и добавяне на малко разстояние от горния и долния ръб */
         }
         
         h1, p {
-                font-family: "Kanit", sans-serif;
-                font-weight: 800;
-                font-style: normal;
-            }
+            font-family: "Kanit", sans-serif;
+            font-weight: 800;
+            font-style: normal;
+        }
         .btn, .form-control {
-                font-family: "Kanit", sans-serif;
-                font-weight: 800;
-                font-style: normal;
+            font-family: "Kanit", sans-serif;
+            font-weight: 800;
+            font-style: normal;
         }
         @media (max-width: 567px) {
             .form-row {
@@ -66,26 +68,25 @@
             .form-control {
                 text-align: center;
             }
-           
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="my-2 text-center">Такси калкулатор за Пловдив</h1>
+        <h1 class="my-2 text-center">Taxi Calculator</h1>
         <div class="form-row mb-3">
             <div class="col">
-                <label for="origin">Начална точка:</label>
-                <input id="origin" class="form-control" type="text" placeholder="Например: Централна гара, Пловдив">
+                <label for="origin">Starting Point:</label>
+                <input id="origin" class="form-control" type="text" placeholder="For example: Mall Markovo Tepe">
             </div>
             <div class="col">
-                <label for="destination">Крайна точка:</label>
-                <input id="destination" class="form-control" type="text" placeholder="Например: Mall Plovdiv">
+                <label for="destination">Destination:</label>
+                <input id="destination" class="form-control" type="text" placeholder="For example: Mall Plovdiv">
             </div>
         </div>
-        <button class="btn btn-primary mb-3" onclick="calculateRoute()">Изчисли разстояние и цена</button>
-        <div id="map" class="mb-3"></div>
+        <button class="btn btn-primary mb-3" onclick="calculateRoute()">Calculate Distance</button>
         <div id="output" class="alert alert-info"></div>
+        <div id="map" class="mb-3"></div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -122,12 +123,12 @@
 
             geocoder.geocode(origin, function (results) {
                 if (results.length > 0) {
-                    originMarker = L.marker(results[0].center).addTo(map).bindPopup('Начална точка').openPopup();
+                    originMarker = L.marker(results[0].center).addTo(map).bindPopup('Starting Point').openPopup();
                     map.setView(results[0].center, 13);
 
                     geocoder.geocode(destination, function (results2) {
                         if (results2.length > 0) {
-                            destinationMarker = L.marker(results2[0].center).addTo(map).bindPopup('Крайна точка').openPopup();
+                            destinationMarker = L.marker(results2[0].center).addTo(map).bindPopup('Destination').openPopup();
 
                             const latlngs = [results[0].center, results2[0].center];
                             routeLine = L.polyline(latlngs, { color: 'blue' }).addTo(map);
@@ -135,15 +136,15 @@
                             const distance = map.distance(results[0].center, results2[0].center) / 1000; // в километри
                             const fare = calculateFare(distance);
                             document.getElementById('output').innerHTML = `
-                                <p>Разстояние: ${distance.toFixed(2)} км</p>
-                                <p>Приблизителна цена на такси: ${fare.toFixed(2)} лв</p>
+                                <p>Distance: ${distance.toFixed(2)} km</p>
+                                <p>Approximate taxi fare: ${fare.toFixed(2)} BGN</p>
                             `;
                         } else {
-                            alert('Не може да се намери крайната точка.');
+                            alert('Destination not found.');
                         }
                     });
                 } else {
-                    alert('Не може да се намери началната точка.');
+                    alert('Starting point not found.');
                 }
             });
         }
