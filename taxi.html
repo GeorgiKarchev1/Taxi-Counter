@@ -6,9 +6,6 @@
     <title>Такси калкулатор за Пловдив</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <style>
         #map {
             height: 400px;
@@ -18,15 +15,12 @@
             margin-top: 10px;
         }
         body {
-            font-family: "Kanit", sans-serif;
-            font-weight: 600;
-            font-style: normal;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding-top: 2rem;
+            padding: 0;
             background: linear-gradient(to bottom, black 50%, yellow 50%);
             color: white;
         }
@@ -35,10 +29,21 @@
             padding: 20px;
             border-radius: 10px;
         }
-        h1,p,h2,h3,button {
-            font-family: "Kanit", sans-serif;
-            font-weight: 600;
-            font-style: normal;
+        @media (max-width: 567px) {
+            .form-row {
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+            }
+            .btn {
+                display: block;
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .form-control {
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -57,6 +62,7 @@
         </div>
         <button class="btn btn-primary mb-3" onclick="calculateRoute()">Изчисли разстояние и цена</button>
         <div id="map" class="mb-3"></div>
+        <div id="output" class="alert alert-info"></div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
