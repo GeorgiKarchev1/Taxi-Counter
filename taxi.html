@@ -6,6 +6,9 @@
     <title>Такси калкулатор за Пловдив</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <style>
         #map {
             height: 400px;
@@ -14,7 +17,11 @@
         #output {
             margin-top: 10px;
         }
+       
         body {
+            font-family: "Kanit", sans-serif;
+            font-weight: 800;
+            font-style: normal;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -25,9 +32,24 @@
             color: white;
         }
         .container {
+            font-family: "Kanit", sans-serif;
+            font-weight: 800;
+            font-style: normal;
+            text-align: center;
             background: rgba(0, 0, 0, 0.5);
             padding: 20px;
             border-radius: 10px;
+        }
+        
+        h1, p {
+                font-family: "Kanit", sans-serif;
+                font-weight: 800;
+                font-style: normal;
+            }
+        .btn, .form-control {
+                font-family: "Kanit", sans-serif;
+                font-weight: 800;
+                font-style: normal;
         }
         @media (max-width: 567px) {
             .form-row {
@@ -44,6 +66,7 @@
             .form-control {
                 text-align: center;
             }
+           
         }
     </style>
 </head>
