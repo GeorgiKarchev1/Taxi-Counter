@@ -16,19 +16,24 @@
         }
         body {
             color: white;
-            background: black;
+            background: linear-gradient(to bottom, black 50%, yellow 50%);
         }
         .header-image {
             width: 100%;
-            height: 80px; /* Задаване на по-голяма височина на изображението */
+            height: 120px; /* Задаване на по-голяма височина на изображението */
+            object-fit: cover; /* Изрязване на изображението, за да запълни контейнера */
+        }
+        .header-image2 {
+            width: 100%;
+            height: 120px; /* Задаване на по-голяма височина на изображението */
             object-fit: cover; /* Изрязване на изображението, за да запълни контейнера */
         }
     </style>
 </head>
 <body>
+    <img src="src/taxi.png" alt="Такси калкулатор" class="img-fluid header-image">
     <div class="container">
-        <img src="src/taxi2.png" alt="Такси калкулатор" class="img-fluid header-image">
-        <h1 class="my-4">Такси калкулатор за Пловдив</h1>
+        <h1 class="my-2 text-center" >Такси калкулатор за Пловдив</h1>
         <div class="form-row mb-3">
             <div class="col">
                 <label for="origin">Начална точка:</label>
@@ -41,8 +46,8 @@
         </div>
         <button class="btn btn-primary mb-3" onclick="calculateRoute()">Изчисли разстояние и цена</button>
         <div id="map" class="mb-3"></div>
-        <div id="output" class="alert alert-info"></div>
     </div>
+    <img src="src/taxi.png" alt="Такси калкулатор" class="img-fluid header-image2">
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
