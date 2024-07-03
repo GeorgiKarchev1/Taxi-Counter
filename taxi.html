@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
     <style>
         #map {
             height: 400px;
@@ -30,6 +30,7 @@
             padding: 0;
             background: linear-gradient(to bottom, #101010 50%, #ffc61a 50%);
             color: white;
+            position: relative; /* Важно за абсолютното позициониране на child елементите */
         }
         .container {
             font-family: "Kanit", sans-serif;
@@ -69,6 +70,13 @@
                 text-align: center;
             }
         }
+        /* .made-by {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 2rem;
+            color: black;
+        } */
     </style>
 </head>
 <body>
@@ -88,7 +96,9 @@
         <div id="output" class="alert alert-info"></div>
         <div id="map" class="mb-3"></div>
     </div>
-
+    
+    <!-- <div class="made-by">Made by Karchev</div>  -->
+    
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -97,6 +107,33 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
     <script>
+        function calculateRoute() {
+            const origin = document.getElementById('origin').value;
+            const destination = document.getElementById('destination').value;
+
+            // Geocoding и останалата логика
+
+            // След изчисляването на разстоянието:
+            const distance = map.distance(results[0].center, results2[0].center) / 1000; // в километри
+
+            // Изпращане на данните към сървъра
+            fetch('http://localhost:3000/api/fare/calculate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ origin, destination, distance })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output').innerHTML = `
+                    <p>Distance: ${data.distance.toFixed(2)} km</p>
+                    <p>Approximate taxi fare: ${data.fare.toFixed(2)} BGN</p>
+                `;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
         let map = L.map('map').setView([42.1354, 24.7453], 13);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
