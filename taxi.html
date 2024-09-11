@@ -4,184 +4,212 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taxi Fare Calculator for Plovdiv</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        #map {
-            height: 400px;
-            width: 100%;
-        }
-        #output {
-            margin-top: 10px;
-        }
-       
         body {
-            font-family: "Kanit", sans-serif;
-            font-weight: 800;
-            font-style: normal;
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            margin: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to bottom, #101010 50%, #ffc61a 50%);
-            color: white;
-            position: relative; /* Важно за абсолютното позициониране на child елементите */
+            color: #fff;
         }
         .container {
-            font-family: "Kanit", sans-serif;
-            font-weight: 800;
-            font-style: normal;
+            background: #2a2a2a;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        h1 {
+            color: #ffd700;
             text-align: center;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 600px; /* По-малък контейнер за по-малки екрани */
-            margin: 20px auto; /* Центриране на контейнера и добавяне на малко разстояние от горния и долния ръб */
+            margin-bottom: 30px;
+            font-weight: 700;
         }
-        
-        h1, p {
-            font-family: "Kanit", sans-serif;
-            font-weight: 800;
-            font-style: normal;
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
         }
-        .btn, .form-control {
-            font-family: "Kanit", sans-serif;
-            font-weight: 800;
-            font-style: normal;
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ffd700;
         }
-        @media (max-width: 567px) {
-            .form-row {
-                text-align: center;
-                display: flex;
-                flex-direction: column;
-            }
-            .btn {
-                display: block;
-                width: 100%;
-                margin-top: 10px;
-            }
-
-            .form-control {
-                text-align: center;
+        .form-control {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid #444;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            background-color: #333;
+            color: #fff;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+        .btn {
+            background: #ffd700;
+            color: #000;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-transform: uppercase;
+        }
+        .btn:hover {
+            background: #e6c200;
+        }
+        #map {
+            height: 300px;
+            border-radius: 15px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 2px solid #444;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            background: #333;
+            border-radius: 15px;
+            text-align: center;
+        }
+        #output p {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+        .taxi-icon {
+            text-align: center;
+            font-size: 48px;
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 500px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="my-2 text-center">Taxi Calculator</h1>
-        <div class="form-row mb-3">
-            <div class="col">
-                <label for="origin">Starting Point:</label>
-                <input id="origin" class="form-control" type="text" placeholder="For example: Mall Markovo Tepe">
-            </div>
-            <div class="col">
-                <label for="destination">Destination:</label>
-                <input id="destination" class="form-control" type="text" placeholder="For example: Mall Plovdiv">
-            </div>
+        <div class="taxi-icon">
+            <i class="fas fa-taxi"></i>
         </div>
-        <button class="btn btn-primary mb-3" onclick="calculateRoute()">Calculate Distance</button>
-        <div id="output" class="alert alert-info"></div>
-        <div id="map" class="mb-3"></div>
+        <h1>Taxi Fare Calculator</h1>
+        <div class="input-group">
+            <i class="fas fa-map-marker-alt"></i>
+            <input id="origin" class="form-control" type="text" placeholder="Starting Point">
+        </div>
+        <div class="input-group">
+            <i class="fas fa-flag-checkered"></i>
+            <input id="destination" class="form-control" type="text" placeholder="Destination">
+        </div>
+        <button class="btn" onclick="calculateRoute()">Calculate Fare</button>
+        <div id="map"></div>
+        <div id="output" style="display: none;"></div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-
     <script>
-        function calculateRoute() {
-            const origin = document.getElementById('origin').value;
-            const destination = document.getElementById('destination').value;
+        let map, geocoder, originMarker, destinationMarker, routeLine;
 
-            // Geocoding и останалата логика
-
-            // След изчисляването на разстоянието:
-            const distance = map.distance(results[0].center, results2[0].center) / 1000; // в километри
-
-            // Изпращане на данните към сървъра
-            fetch('http://localhost:3000/api/fare/calculate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ origin, destination, distance })
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('output').innerHTML = `
-                    <p>Distance: ${data.distance.toFixed(2)} km</p>
-                    <p>Approximate taxi fare: ${data.fare.toFixed(2)} BGN</p>
-                `;
-            })
-            .catch(error => console.error('Error:', error));
+        function initMap() {
+            map = L.map('map').setView([42.1354, 24.7453], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            geocoder = L.Control.Geocoder.nominatim();
         }
 
-        let map = L.map('map').setView([42.1354, 24.7453], 13);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        let geocoder = L.Control.Geocoder.nominatim();
-        let originMarker, destinationMarker;
-        let routeLine;
-
         function calculateRoute() {
             const origin = document.getElementById('origin').value;
             const destination = document.getElementById('destination').value;
 
-            if (originMarker) {
-                map.removeLayer(originMarker);
-            }
-            if (destinationMarker) {
-                map.removeLayer(destinationMarker);
-            }
-            if (routeLine) {
-                map.removeLayer(routeLine);
+            if (!origin || !destination) {
+                alert('Please enter both starting point and destination.');
+                return;
             }
 
-            geocoder.geocode(origin, function (results) {
-                if (results.length > 0) {
-                    originMarker = L.marker(results[0].center).addTo(map).bindPopup('Starting Point').openPopup();
-                    map.setView(results[0].center, 13);
+            clearMap();
 
-                    geocoder.geocode(destination, function (results2) {
-                        if (results2.length > 0) {
-                            destinationMarker = L.marker(results2[0].center).addTo(map).bindPopup('Destination').openPopup();
+            geocodeAndAddMarker(origin, 'Starting Point')
+                .then(originCoords => geocodeAndAddMarker(destination, 'Destination')
+                    .then(destCoords => {
+                        drawRoute(originCoords, destCoords);
+                        const distance = calculateDistance(originCoords, destCoords);
+                        const fare = calculateFare(distance);
+                        displayResult(distance, fare);
+                    }))
+                .catch(error => console.error('Error:', error));
+        }
 
-                            const latlngs = [results[0].center, results2[0].center];
-                            routeLine = L.polyline(latlngs, { color: 'blue' }).addTo(map);
-
-                            const distance = map.distance(results[0].center, results2[0].center) / 1000; // в километри
-                            const fare = calculateFare(distance);
-                            document.getElementById('output').innerHTML = `
-                                <p>Distance: ${distance.toFixed(2)} km</p>
-                                <p>Approximate taxi fare: ${fare.toFixed(2)} BGN</p>
-                            `;
-                        } else {
-                            alert('Destination not found.');
-                        }
-                    });
-                } else {
-                    alert('Starting point not found.');
-                }
+        function geocodeAndAddMarker(location, label) {
+            return new Promise((resolve, reject) => {
+                geocoder.geocode(location, results => {
+                    if (results.length > 0) {
+                        const coords = results[0].center;
+                        L.marker(coords).addTo(map).bindPopup(label).openPopup();
+                        map.setView(coords, 13);
+                        resolve(coords);
+                    } else {
+                        reject(`${label} not found.`);
+                    }
+                });
             });
         }
 
+        function drawRoute(start, end) {
+            routeLine = L.polyline([start, end], { color: 'blue' }).addTo(map);
+            map.fitBounds(routeLine.getBounds());
+        }
+
+        function calculateDistance(start, end) {
+            return map.distance(start, end) / 1000; // km
+        }
+
         function calculateFare(distance) {
-            const baseFare = 2.0; // начална такса в лева
-            const farePerKm = 1.0; // такса на километър в лева
+            const baseFare = 2.0;
+            const farePerKm = 1.0;
             return baseFare + (distance * farePerKm);
         }
+
+        function displayResult(distance, fare) {
+            const output = document.getElementById('output');
+            output.innerHTML = `
+                <p>Distance: ${distance.toFixed(2)} km</p>
+                <p>Approximate taxi fare: ${fare.toFixed(2)} BGN</p>
+            `;
+            output.style.display = 'block';
+        }
+
+        function clearMap() {
+            if (originMarker) map.removeLayer(originMarker);
+            if (destinationMarker) map.removeLayer(destinationMarker);
+            if (routeLine) map.removeLayer(routeLine);
+        }
+
+        window.onload = initMap;
     </script>
 </body>
 </html>

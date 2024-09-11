@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Fare = require('../models/Fare');
+const Fare = require('./models/Fare');
 
 // Route за изчисляване на таксата
 router.post('/calculate-fare', async (req, res) => {
