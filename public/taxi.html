@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxi Service</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .navbar {
+            background-color: #2d2d2d;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffd700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1499353965760-b85389474bef?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Dw=1200') center/cover;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px; 
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-section button {
+            min-width: 200px;
+            justify-content: center;
+        }
+
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .auth-form {
+            background: #2d2d2d;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            width: 300px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .form-group i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem 2.5rem;
+            margin: 0.5rem 0;
+            border: 1px solid #444;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #333;
+            color: #fff;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+
+        button {
+            background-color: #ffd700;
+            color: #000;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            background-color: #ffed4a;
+            transform: translateY(-2px);
+        }
+
+        .secondary-button {
+            background-color: #444;
+            color: #fff;
+        }
+
+        .secondary-button:hover {
+            background-color: #555;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: #2d2d2d;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
+
+        .price-list {
+            background: #2d2d2d;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #444;
+        }
+
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-buttons {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-taxi"></i>
+            TaxiService
+        </div>
+        <div class="nav-buttons">
+            <button onclick="showPrices()" class="secondary-button">
+                <i class="fas fa-tag"></i> Taxi Prices
+            </button>
+            <button onclick="showLoginForm()">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+            <button onclick="showRegisterForm()">
+                <i class="fas fa-user-plus"></i> Register
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="hero-section">
+            <h1><i class="fas fa-star"></i> Welcome to TaxiService</h1>
+            <p>Fast, reliable, and comfortable rides at your service</p>
+            <button onclick="orderNow()">
+                <i class="fas fa-car"></i> Order Now
+            </button>
+        </section>
+
+        <div class="auth-container" id="authForms" style="display: none;">
+            <div class="auth-form" id="loginForm">
+                <h2><i class="fas fa-sign-in-alt"></i> Sign In</h2>
+                <div class="form-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="loginUsername" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="loginPassword" placeholder="Password">
+                </div>
+                <button onclick="login()">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+            </div>
+
+            <div class="auth-form" id="registerForm">
+                <h2><i class="fas fa-user-plus"></i> Register</h2>
+                <div class="form-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="registerUsername" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="registerPassword" placeholder="Password">
+                </div>
+                <button onclick="register()">
+                    <i class="fas fa-user-plus"></i> Register
+                </button>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <i class="fas fa-bolt"></i>
+                <h3>Quick Booking</h3>
+                <p>Book your taxi in just a few clicks</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-dollar-sign"></i>
+                <h3>Best Prices</h3>
+                <p>Competitive rates for all destinations</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-clock"></i>
+                <h3>24/7 Service</h3>
+                <p>Available whenever you need us</p>
+            </div>
+        </div>
+
+        <div class="price-list" id="priceList">
+            <h2><i class="fas fa-tag"></i> Our Prices</h2>
+            <div class="price-item">
+                <span>City Ride</span>
+                <span>$10</span>
+            </div>
+            <div class="price-item">
+                <span>Airport Transfer</span>
+                <span>$50</span>
+            </div>
+            <div class="price-item">
+                <span>Hourly Rate</span>
+                <span>$30/hour</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showLoginForm() {
+            document.getElementById('authForms').style.display = 'flex';
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('priceList').style.display = 'none';
+        }
+
+        function showRegisterForm() {
+            document.getElementById('authForms').style.display = 'flex';
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+            document.getElementById('priceList').style.display = 'none';
+        }
+
+        function showPrices() {
+            const priceList = document.getElementById('priceList');
+            priceList.style.display = priceList.style.display === 'none' ? 'block' : 'none';
+            document.getElementById('authForms').style.display = 'none';
+        }
+
+        // ... rest of your existing JavaScript functions ...
+    </script>
+</body>
+</html>
