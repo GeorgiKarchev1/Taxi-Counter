@@ -135,8 +135,27 @@
         function login() {
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
-            // Add your login logic here
-            console.log('Login attempted:', username, password);
+
+            // Basic validation
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Get users from localStorage
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+            // Check credentials
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                // Store current user
+                localStorage.setItem('currentUser', username);
+                alert('Login successful!');
+                window.location.href = 'taxi.html'; // Redirect to main page
+            } else {
+                alert('Invalid username or password');
+            }
         }
     </script>
 </body>

@@ -135,8 +135,31 @@
         function register() {
             const username = document.getElementById('registerUsername').value;
             const password = document.getElementById('registerPassword').value;
-            // Add your registration logic here
-            console.log('Registration attempted:', username, password);
+
+            // Basic validation
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Get existing users or initialize empty array
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+            // Check if username already exists
+            if (users.some(user => user.username === username)) {
+                alert('Username already exists');
+                return;
+            }
+
+            // Add new user
+            users.push({ username, password });
+            localStorage.setItem('users', JSON.stringify(users));
+
+            // Store current user
+            localStorage.setItem('currentUser', username);
+
+            alert('Registration successful!');
+            window.location.href = 'taxi.html'; // Redirect to main page
         }
     </script>
 </body>
